@@ -74,12 +74,12 @@ class Frecuency():
         
         letras_colum = []
         porcentaje_column = []
-        porcentaje_t_column = [12.53, 1.42, 4.68, 5.86, 13.68, 
-                               0.69, 1.01, 0.70, 6.25, 0.44,
-                               0.02, 4.97, 3.15, 6.71, 0.31,
-                               8.68, 2.51, 0.88, 6.87, 7.98,
-                               4.63, 3.93, 0.90, 0.01, 0.22,
-                               0.90, 0.52]
+        porcentaje_t_column = {'a':12.53, 'b':1.42, 'c':4.68, 'd':5.86, 'e':13.68, 
+                               'f':0.69, 'g':1.01, 'h':0.70, 'i':6.25, 'j':0.44,
+                               'k':0.02, 'l':4.97, 'm':3.15, 'n':6.71, 'ñ':0.31,
+                               'o':8.68, 'p':2.51, 'q':0.88, 'r':6.87, 's':7.98,
+                               't':4.63, 'u':3.93, 'v':0.90, 'w':0.01, 'x':0.22,
+                               'y':0.90, 'z':0.52}
         
         print("Distribución de probabilidades de letras:")
         for letra in self.alpha:
@@ -87,15 +87,21 @@ class Frecuency():
             porcentaje = probabilidad*100
             letras_colum.append(letra)
             porcentaje_column.append(porcentaje)
-            
-        # self.table.add_column("Letra", letras_colum)
-        # self.table.add_column("Porcentaje encontrado", sorted(porcentaje_column, reverse=True))
-        # self.table.add_column("Porcentaje teórico", sorted(porcentaje_t_column, reverse=True))
 
-        # Inciso 2
-        self.table.add_column("Letra", letras_colum)
-        self.table.add_column("Porcentaje encontrado", porcentaje_column)
-        #self.table.add_column("Porcentaje teórico", porcentaje_t_column)
+        letras_y_porcentajes_ordenados = sorted(zip(letras_colum, porcentaje_column), key=lambda x: x[1], reverse=True)
+        letras_ordenadas, porcentajes_ordenados = zip(*letras_y_porcentajes_ordenados)
+        self.table.add_column("Letra encontrada", letras_ordenadas)
+        self.table.add_column("% encontrado", ["{:.2f}%".format(p) for p in porcentajes_ordenados])
+
+        letras_ordenadas_B = sorted(porcentaje_t_column, key=lambda x: porcentaje_t_column[x], reverse=True)
+        porcentajes_t_ordenados = [porcentaje_t_column[letra] for letra in letras_ordenadas_B]
+        self.table.add_column("Letra (teórica)", letras_ordenadas_B)
+        self.table.add_column("% teórico", ["{:.2f}%".format(p) for p in porcentajes_t_ordenados])
+
+        # Inciso 2 Lab A
+        #self.table.add_column("Letra", letras_colum)
+        #self.table.add_column("Porcentaje encontrado", porcentaje_column)
+        ##self.table.add_column("Porcentaje teórico", porcentaje_t_column)
 
         print(self.table)
 
