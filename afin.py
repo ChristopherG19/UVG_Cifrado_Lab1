@@ -53,10 +53,6 @@ class Afin():
             print("Por favor, ingrese valores numéricos.")
             return
         
-        if math.gcd(a, len(self.alpha)) != 1:
-            print("'a' y la longitud del alfabeto(27) deben ser coprimos.")
-            return
-        
         newW = ""
         
         for c in word:

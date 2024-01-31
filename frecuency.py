@@ -92,9 +92,10 @@ class Frecuency():
         # self.table.add_column("Porcentaje encontrado", sorted(porcentaje_column, reverse=True))
         # self.table.add_column("Porcentaje teórico", sorted(porcentaje_t_column, reverse=True))
 
+        # Inciso 2
         self.table.add_column("Letra", letras_colum)
         self.table.add_column("Porcentaje encontrado", porcentaje_column)
-        self.table.add_column("Porcentaje teórico", porcentaje_t_column)
+        #self.table.add_column("Porcentaje teórico", porcentaje_t_column)
 
         print(self.table)
 

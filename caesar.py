@@ -2,8 +2,6 @@
 # Cifrado de la información
 # Laboratorio#1 A
 
-import string
-
 class Caesar():
     def __init__(self):
         self.alpha = "abcdefghijklmnñopqrstuvwxyz"
