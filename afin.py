@@ -35,6 +35,10 @@ class Afin():
         desp = int(input("Desplazamiento: "))
         newW = ""
         
+        if math.gcd(a, len(self.alpha)) != 1:
+            print("El valor de 'a' no es invertible para el módulo 27")
+            return
+        
         for c in proc.lower():
             if c in self.alpha:
                 newW += self.alpha[((a*(self.alpha.index(c)) + desp) % (len(self.alpha)))]
@@ -57,7 +61,10 @@ class Afin():
         
         for c in word:
             if c in self.alpha:
-                newW += self.alpha[((pow(a, -1, len(self.alpha)) * (self.alpha.index(c) - desp)) % len(self.alpha))]
+                inv = pow(a, -1, len(self.alpha))
+                val_b = (self.alpha.index(c) - desp)
+                pos = (inv * val_b) % len(self.alpha)
+                newW += self.alpha[pos]
             else:
                 newW += c
         
