@@ -3,16 +3,16 @@
 # Laboratorio#1 A
 
 from prettytable import PrettyTable
+import math
 
 class Frecuency():
     def __init__(self):
         self.alpha = "abcdefghijklmnñopqrstuvwxyz"
-        self.table = PrettyTable()
         flag = True
         
         while flag:
             try:
-                print("\nMenú (Cifrado con frecuencias)\n\n1) Encriptar\n2) Desencriptar\n3) Salir")
+                print("\nMenú (Cifrado Afín con frecuencia)\n\n1) Encriptar\n2) Desencriptar\n3) Salir")
                 opt = int(input("\nIngrese una opción: "))
                 
                 if(opt == 1):
@@ -27,21 +27,26 @@ class Frecuency():
                 
             except:
                 print("Ha ocurrido un error con la opción ingresada")
-                
+    
     def encriptar(self):
         word = input("Palabra a encriptar: ")
-        a,b = 'áéíóúü','aeiouu'
-        proc = word.strip().translate(str.maketrans(a,b))
+        x1,x2 = 'áéíóúü','aeiouu'
+        proc = word.strip().translate(str.maketrans(x1,x2))
+        a = int(input("Ingrese a: "))
         desp = int(input("Desplazamiento: "))
         newW = ""
         
+        if math.gcd(a, len(self.alpha)) != 1:
+            print("El valor de 'a' no es invertible para el módulo 27")
+            return
+        
         for c in proc.lower():
             if c in self.alpha:
-                newW += self.alpha[(self.alpha.index(c) + desp % (len(self.alpha)))]
+                newW += self.alpha[((a*(self.alpha.index(c)) + desp) % (len(self.alpha)))]
             else:
                 newW += c
         
-        print("\nPalabra encriptada:", newW)
+        print("\nPalabra encriptada:", newW)    
         
     def brute_force(self):
         self.table = PrettyTable()
@@ -51,20 +56,28 @@ class Frecuency():
         
         first_e = list(list_e.items())[0]
         first_t = list(list_t.items())[0]
-        
-        init_index = abs(((self.alpha.index(first_e[0])) - (self.alpha.index(first_t[0]))))
+        second_e = list(list_e.items())[1]
+        second_t = list(list_t.items())[1]
         
         for x in range(len(self.alpha)):
-            res = self.desencriptar(word, init_index)
-            print(f"\nIntento ({x+1}) | Desplazamiento: {init_index % len(self.alpha)}\nResultado: {res}")
-            init_index += 1
+           for y in range(len(self.alpha)):
+                init_index = abs(((self.alpha.index(first_e[0]) + x) - (self.alpha.index(first_t[0]))))
+                init_index_2 = abs(((self.alpha.index(second_e[0]) + y) - (self.alpha.index(second_t[0]))))
+                res = self.desencriptar(word, init_index, init_index_2)
+                if(res != '  '):
+                    print(f"\nIntento ({x+1}) | a: {init_index % len(self.alpha)} | b: {init_index_2 % len(self.alpha)}\nResultado: {res}")
         
-    def desencriptar(self, word, desp):
+    def desencriptar(self, word, a, b):
         newW = ""
-        
         for c in word.lower():
             if c in self.alpha:
-                newW += self.alpha[(self.alpha.index(c) - desp % (len(self.alpha)))]
+                try:
+                    inv = pow(a, -1, len(self.alpha))
+                    val_b = (self.alpha.index(c) - b)
+                    pos = (inv * val_b) % len(self.alpha)
+                    newW += self.alpha[pos]
+                except:
+                    pass
             else:
                 newW += c
         
