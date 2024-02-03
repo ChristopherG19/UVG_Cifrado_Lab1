@@ -67,7 +67,6 @@ class Frecuency():
                     res = self.desencriptar(word, key2)
                     if res != "N/A":
                         line = f"Key: {key} | Resultado: {res}\n"
-                        #print(line)
                         file.write(line)
         
     def check_equal(self, l1, l2):

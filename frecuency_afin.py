@@ -67,7 +67,6 @@ class Frecuency():
                     res = self.desencriptar(word, init_index, init_index_2)
                     if res != "N/A":
                         line = f"Intento ({x}) | a: {init_index % len(self.alpha)} | b: {init_index_2 % len(self.alpha)} | Resultado: {res}\n"
-                        print(line)
                         file.write(line)
         
     def desencriptar(self, word, a, b):

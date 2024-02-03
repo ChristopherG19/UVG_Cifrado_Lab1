@@ -47,17 +47,19 @@ class Frecuency():
         self.table = PrettyTable()
         word = input("Palabra a desencriptar: ")
 
-        list_e, list_t = self.frecuency(word)
+        list_e, list_t = self.frecuency(word.lower())
         
         first_e = list(list_e.items())[0]
         first_t = list(list_t.items())[0]
         
         init_index = abs(((self.alpha.index(first_e[0])) - (self.alpha.index(first_t[0]))))
         
-        for x in range(len(self.alpha)):
-            res = self.desencriptar(word, init_index)
-            print(f"\nIntento ({x+1}) | Desplazamiento: {init_index % len(self.alpha)}\nResultado: {res}")
-            init_index += 1
+        with open("Caesar.txt", "w", encoding="utf-8") as file:
+            for x in range(len(self.alpha)):
+                res = self.desencriptar(word, init_index)
+                line = f"Intento ({x+1}) | Desplazamiento: {init_index % len(self.alpha)}\nResultado: {res}\n"
+                init_index += 1
+                file.write(line)
         
     def desencriptar(self, word, desp):
         newW = ""
