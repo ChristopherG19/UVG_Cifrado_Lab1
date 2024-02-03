@@ -52,20 +52,23 @@ class Frecuency():
         self.table = PrettyTable()
         word = input("Palabra a desencriptar: ")
 
-        list_e, list_t = self.frecuency(word)
+        list_e, list_t = self.frecuency(word.lower())
         
         first_e = list(list_e.items())[0]
         first_t = list(list_t.items())[0]
         second_e = list(list_e.items())[1]
         second_t = list(list_t.items())[1]
         
-        for x in range(len(self.alpha)):
-           for y in range(len(self.alpha)):
-                init_index = abs(((self.alpha.index(first_e[0]) + x) - (self.alpha.index(first_t[0]))))
-                init_index_2 = abs(((self.alpha.index(second_e[0]) + y) - (self.alpha.index(second_t[0]))))
-                res = self.desencriptar(word, init_index, init_index_2)
-                if(res != '  '):
-                    print(f"\nIntento ({x+1}) | a: {init_index % len(self.alpha)} | b: {init_index_2 % len(self.alpha)}\nResultado: {res}")
+        with open("resultados.txt", "w", encoding="utf-8") as file:
+            for x in range(len(self.alpha) + 1):
+                for y in range(len(self.alpha) + 1):
+                    init_index = abs(((self.alpha.index(first_e[0]) + (x + 1)) - (self.alpha.index(first_t[0]))))
+                    init_index_2 = abs(((self.alpha.index(second_e[0]) + (y + 1)) - (self.alpha.index(second_t[0]))))
+                    res = self.desencriptar(word, init_index, init_index_2)
+                    if res != "N/A":
+                        line = f"Intento ({x}) | a: {init_index % len(self.alpha)} | b: {init_index_2 % len(self.alpha)} | Resultado: {res}\n"
+                        print(line)
+                        file.write(line)
         
     def desencriptar(self, word, a, b):
         newW = ""
@@ -77,7 +80,7 @@ class Frecuency():
                     pos = (inv * val_b) % len(self.alpha)
                     newW += self.alpha[pos]
                 except:
-                    pass
+                    return "N/A"
             else:
                 newW += c
         

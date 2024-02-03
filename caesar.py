@@ -1,7 +1,7 @@
 # Universidad del Valle de Guatemala
 # Cifrado de la información
 # Laboratorio#1 A
-
+ 
 class Caesar():
     def __init__(self):
         self.alpha = "abcdefghijklmnñopqrstuvwxyz"

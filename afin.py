@@ -59,10 +59,10 @@ class Afin():
         
         newW = ""
         
-        for c in word:
+        for c in word.lower():
             if c in self.alpha:
-                inv = pow(a, -1, len(self.alpha))
-                val_b = (self.alpha.index(c) - desp)
+                inv = pow(23, -1, len(self.alpha))
+                val_b = (self.alpha.index(c) - 7)
                 pos = (inv * val_b) % len(self.alpha)
                 newW += self.alpha[pos]
             else:
