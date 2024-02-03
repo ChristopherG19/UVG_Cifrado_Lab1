@@ -12,7 +12,7 @@ class Frecuency():
         
         while flag:
             try:
-                print("\nMenú (Cifrado con frecuencias)\n\n1) Encriptar\n2) Desencriptar\n3) Salir")
+                print("\nMenú (Cifrado Caesar - Fuerza Bruta)\n\n1) Encriptar\n2) Desencriptar\n3) Salir")
                 opt = int(input("\nIngrese una opción: "))
                 
                 if(opt == 1):

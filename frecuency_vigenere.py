@@ -3,16 +3,17 @@
 # Laboratorio#1 A
 
 from prettytable import PrettyTable
-import math
+from itertools import product
 
 class Frecuency():
     def __init__(self):
         self.alpha = "abcdefghijklmnñopqrstuvwxyz"
+        self.table = PrettyTable()
         flag = True
         
         while flag:
             try:
-                print("\nMenú (Cifrado Afín - Fuerza Bruta)\n\n1) Encriptar\n2) Desencriptar\n3) Salir")
+                print("\nMenú (Cifrado Vigenere - Fuerza Bruta)\n\n1) Encriptar\n2) Desencriptar\n3) Salir")
                 opt = int(input("\nIngrese una opción: "))
                 
                 if(opt == 1):
@@ -27,60 +28,74 @@ class Frecuency():
                 
             except:
                 print("Ha ocurrido un error con la opción ingresada")
-    
+                
     def encriptar(self):
         word = input("Palabra a encriptar: ")
         x1,x2 = 'áéíóúü','aeiouu'
         proc = word.strip().translate(str.maketrans(x1,x2))
-        a = int(input("Ingrese a: "))
-        desp = int(input("Desplazamiento: "))
+        key = input("Ingrese clave: ")
         newW = ""
+        key2 = (key * (len(proc) // len(key))) + key[:len(proc) % len(key)]
         
-        if math.gcd(a, len(self.alpha)) != 1:
-            print("El valor de 'a' no es invertible para el módulo 27")
-            return
-        
-        for c in proc.lower():
+        for c, c2 in zip(proc.lower(), key2.lower()):
             if c in self.alpha:
-                newW += self.alpha[((a*(self.alpha.index(c)) + desp) % (len(self.alpha)))]
+                newW += self.alpha[((self.alpha.index(c) + self.alpha.index(c2)) % (len(self.alpha)))]
             else:
                 newW += c
-        
-        print("\nPalabra encriptada:", newW)    
+
+        print("\nPalabra encriptada:", newW)
         
     def brute_force(self):
         self.table = PrettyTable()
         word = input("Palabra a desencriptar: ")
+        x1,x2 = 'áéíóúü','aeiouu'
+        proc = word.strip().translate(str.maketrans(x1,x2))
+        word_m = proc.lower()
+        l_1 = list(word_m)
+        l_2 = list(word_m)
+        
+        kasiski_res = self.check_equal(l_1, l_2)
+        
+        if(type(kasiski_res) == int):
+            # Genera todas las combinaciones de 4 letras con el alfabeto
+            combinaciones = [''.join(p) for p in product(self.alpha, repeat=kasiski_res)]
 
-        list_e, list_t = self.frecuency(word.lower())
-        
-        first_e = list(list_e.items())[0]
-        first_t = list(list_t.items())[0]
-        second_e = list(list_e.items())[1]
-        second_t = list(list_t.items())[1]
-        
-        with open("Afin.txt", "w", encoding="utf-8") as file:
-            for x in range(len(self.alpha) + 1):
-                for y in range(len(self.alpha) + 1):
-                    init_index = abs(((self.alpha.index(first_e[0]) + (x + 1)) - (self.alpha.index(first_t[0]))))
-                    init_index_2 = abs(((self.alpha.index(second_e[0]) + (y + 1)) - (self.alpha.index(second_t[0]))))
-                    res = self.desencriptar(word, init_index, init_index_2)
+            # Imprime las combinaciones
+            with open("Vigenere.txt", "w", encoding="utf-8") as file:
+                for key in combinaciones:
+                    key2 = (key * (len(proc) // len(key))) + key[:len(proc) % len(key)]
+                    res = self.desencriptar(word, key2)
                     if res != "N/A":
-                        line = f"Intento ({x}) | a: {init_index % len(self.alpha)} | b: {init_index_2 % len(self.alpha)} | Resultado: {res}\n"
-                        print(line)
+                        line = f"Key: {key} | Resultado: {res}\n"
+                        #print(line)
                         file.write(line)
         
-    def desencriptar(self, word, a, b):
+    def check_equal(self, l1, l2):
+        tot = 0 
+        for pos in range(len(l1)):
+            equal = 0
+            
+            l2.pop()
+            l2.insert(0, "")
+            
+            for pos2 in range(len(l1)):    
+                if(l1[pos2] == l2[pos2]):
+                    equal += 1
+            
+            if(equal >= tot):
+                tot = equal
+                
+            elif(equal < tot):
+                return pos
+                        
+        return "Error"
+        
+    def desencriptar(self, word, key2):
         newW = ""
-        for c in word.lower():
+        
+        for c, c2 in zip(word.lower(), key2.lower()):
             if c in self.alpha:
-                try:
-                    inv = pow(a, -1, len(self.alpha))
-                    val_b = (self.alpha.index(c) - b)
-                    pos = (inv * val_b) % len(self.alpha)
-                    newW += self.alpha[pos]
-                except:
-                    return "N/A"
+                newW += self.alpha[((self.alpha.index(c) - self.alpha.index(c2)) % (len(self.alpha)))]
             else:
                 newW += c
         
